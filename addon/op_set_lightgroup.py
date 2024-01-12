@@ -32,7 +32,7 @@ class LGH_OT_set_light_group(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class LGH_MT_lightgroup_menu(bpy.types.Menu):
+class LGH_MT_LightgroupMenu(bpy.types.Menu):
     bl_idname = "lgh.lightgroup_menu"
     bl_label = "Set Light Group for Object"
     bl_description = "Select or create a new light group for the selected objects"
@@ -112,7 +112,7 @@ class LGH_OT_remove_light_group(bpy.types.Operator):
 
 classes = [
     LGH_OT_create_light_group,
-    LGH_MT_lightgroup_menu,
+    LGH_MT_LightgroupMenu,
     LGH_OT_set_light_group,
     LGH_OT_rename_light_group,
     LGH_OT_remove_light_group,
