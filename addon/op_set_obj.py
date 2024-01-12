@@ -6,7 +6,7 @@ class VIEW_OT_set_active_obj(bpy.types.Operator):
     Ctrl to deselect"""
 
     bl_idname = "view.set_active_obj"
-    bl_label = "Set Active Object"
+    bl_label = "Set active object"
     bl_options = {"INTERNAL", "UNDO"}
     # bl_options = {'INTERNAL'}
 
@@ -29,7 +29,7 @@ class VIEW_OT_select_obj_by_lightgroup(bpy.types.Operator):
     """Select obj by lightgroup"""
 
     bl_idname = "view.select_obj_by_lightgroup"
-    bl_label = "Select Object by Lightgroup"
+    bl_label = "Select objects in lightgroup"
     bl_options = {"INTERNAL", "UNDO"}
 
     lightgroup: bpy.props.StringProperty(name="Lightgroup")
@@ -68,7 +68,7 @@ class VIEW_OT_toggle_lightgroup_visibility(bpy.types.Operator):
 # solo lightgroup object
 class VIEW_OT_solo_lightgroup_object(bpy.types.Operator):
     bl_idname = "view.solo_lightgroup_object"
-    bl_label = "Solo Lightgroup Object"
+    bl_label = "Isolate object in lightgroup"
     bl_option = {"INTERNAL", "UNDO"}
 
     lightgroup: bpy.props.StringProperty(name="Lightgroup")
@@ -94,7 +94,7 @@ class VIEW_OT_solo_lightgroup_object(bpy.types.Operator):
 # solo light in lightgroup
 class VIEW_OT_solo_light_in_lightgroup(bpy.types.Operator):
     bl_idname = "view.solo_light_in_lightgroup"
-    bl_label = "Solo Light in Lightgroup"
+    bl_label = "Isolate light in lightgroup"
     bl_option = {"INTERNAL", "UNDO"}
 
     lightgroup: bpy.props.StringProperty(name="Lightgroup")
@@ -119,7 +119,7 @@ class VIEW_OT_solo_light_in_lightgroup(bpy.types.Operator):
 # reset all solo with light group
 class VIEW_OT_reset_solo_lightgroup(bpy.types.Operator):
     bl_idname = "view.reset_solo_lightgroup"
-    bl_label = "Reset Solo"
+    bl_label = "Unisolate lightgroup"
     bl_option = {"INTERNAL", "UNDO"}
 
     def execute(self, context):
@@ -134,20 +134,20 @@ class VIEW_OT_reset_solo_lightgroup(bpy.types.Operator):
 
         return {"FINISHED"}
 
+classes = [
+    VIEW_OT_set_active_obj,
+    VIEW_OT_select_obj_by_lightgroup,
+    VIEW_OT_toggle_lightgroup_visibility,
+    VIEW_OT_solo_lightgroup_object,
+    VIEW_OT_solo_light_in_lightgroup,
+    VIEW_OT_reset_solo_lightgroup
+]
 
 def register():
-    bpy.utils.register_class(VIEW_OT_set_active_obj)
-    bpy.utils.register_class(VIEW_OT_select_obj_by_lightgroup)
-    bpy.utils.register_class(VIEW_OT_toggle_lightgroup_visibility)
-    bpy.utils.register_class(VIEW_OT_solo_lightgroup_object)
-    bpy.utils.register_class(VIEW_OT_solo_light_in_lightgroup)
-    bpy.utils.register_class(VIEW_OT_reset_solo_lightgroup)
+    for cls in classes:
+        bpy.utils.register_class(cls)
 
 
 def unregister():
-    bpy.utils.unregister_class(VIEW_OT_set_active_obj)
-    bpy.utils.unregister_class(VIEW_OT_select_obj_by_lightgroup)
-    bpy.utils.unregister_class(VIEW_OT_toggle_lightgroup_visibility)
-    bpy.utils.unregister_class(VIEW_OT_solo_lightgroup_object)
-    bpy.utils.unregister_class(VIEW_OT_solo_light_in_lightgroup)
-    bpy.utils.unregister_class(VIEW_OT_reset_solo_lightgroup)
+    for cls in classes:
+        bpy.utils.unregister_class(cls)
