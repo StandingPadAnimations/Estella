@@ -31,6 +31,7 @@ def get_obj_list_in_lightgroup(lightgroup_name):
 
     return list(set(obj_list))
 
+
 class LGH_PT_ToolPanel(bpy.types.Panel):
     bl_label = "Light Groups"
     bl_region_type = "UI"
@@ -187,10 +188,9 @@ class LGH_PT_ObjectPanel(bpy.types.Panel):
         row.alignment = "CENTER"
         row.prop(ob, "display_type")
 
-classes = [
-    LGH_PT_ToolPanel,
-    LGH_PT_ObjectPanel
-]
+
+classes = [LGH_PT_ToolPanel, LGH_PT_ObjectPanel]
+
 
 def register():
     for cls in classes:

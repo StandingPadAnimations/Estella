@@ -1,10 +1,11 @@
 import bpy
 
+
 class LGH_OT_create_light_group(bpy.types.Operator):
     bl_idname = "lgh.create_light_group"
     bl_label = "New Light Group"
     bl_description = "Create a new light group with the selected objects"
-    
+
     @classmethod
     def poll(cls, context):
         return len(context.selected_objects) > 0 and context.object is not None
@@ -17,19 +18,19 @@ class LGH_OT_create_light_group(bpy.types.Operator):
             obj.lightgroup = target_lightgroup
         return {"FINISHED"}
 
+
 class LGH_OT_set_light_group(bpy.types.Operator):
     bl_idname = "lgh.set_light_group"
     bl_label = "Set Light Group"
     bl_description = "Set light group of selected object"
 
-    target: bpy.props.StringProperty(
-        name="Target Light Group",
-        default=""
-    )
+    target: bpy.props.StringProperty(name="Target Light Group", default="")
+
     def execute(self, context):
         for obj in context.selected_objects:
             obj.lightgroup = self.target
         return {"FINISHED"}
+
 
 class LGH_MT_lightgroup_menu(bpy.types.Menu):
     bl_idname = "lgh.lightgroup_menu"
@@ -41,8 +42,11 @@ class LGH_MT_lightgroup_menu(bpy.types.Menu):
         layout.operator("lgh.create_light_group", icon="ADD")
 
         for group in context.view_layer.lightgroups:
-            option = layout.operator("lgh.set_light_group", icon="LIGHT", text=group.name)
+            option = layout.operator(
+                "lgh.set_light_group", icon="LIGHT", text=group.name
+            )
             option.target = group.name
+
 
 class LGH_OT_rename_light_group(bpy.types.Operator):
     bl_idname = "lgh.rename_light_group"
@@ -59,17 +63,17 @@ class LGH_OT_rename_light_group(bpy.types.Operator):
     def execute(self, context):
         from .ui import get_obj_list_in_lightgroup
 
-        # Get all objects from the lightgroup. This 
+        # Get all objects from the lightgroup. This
         # is because Blender doesn't provide a native
         # way of renaming light groups
         fit_list = get_obj_list_in_lightgroup(self.lightgroup_name)
         if self.new_name in [lg.name for lg in context.view_layer.lightgroups]:
             self.report({"ERROR"}, "Light Group Already Exists")
             return {"CANCELLED"}
-        
+
         context.view_layer.lightgroups[self.lightgroup_name].name = self.new_name
 
-        # We have to reassign all objects to the 
+        # We have to reassign all objects to the
         # renamed lightgroup cause again, Blender
         # doesn't provide a native function for this
         for obj in fit_list:
@@ -80,6 +84,7 @@ class LGH_OT_rename_light_group(bpy.types.Operator):
         wm = context.window_manager
         self.new_name = self.lightgroup_name
         return wm.invoke_props_dialog(self)
+
 
 class LGH_OT_remove_light_group(bpy.types.Operator):
     bl_idname = "lgh.remove_light_group"
@@ -93,7 +98,7 @@ class LGH_OT_remove_light_group(bpy.types.Operator):
             if lightgroup_item.name == self.lightgroup_name:
                 bpy.ops.scene.view_layer_remove_lightgroup(i)
                 break
-        
+
         from .ui import get_obj_list_in_lightgroup
 
         # Get all objects in the lightgroup
@@ -104,17 +109,20 @@ class LGH_OT_remove_light_group(bpy.types.Operator):
 
         return {"FINISHED"}
 
+
 classes = [
     LGH_OT_create_light_group,
     LGH_MT_lightgroup_menu,
     LGH_OT_set_light_group,
     LGH_OT_rename_light_group,
-    LGH_OT_remove_light_group
+    LGH_OT_remove_light_group,
 ]
+
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
+
 
 def unregister():
     for cls in reversed(classes):
