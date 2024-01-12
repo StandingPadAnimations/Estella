@@ -1,0 +1,1 @@
+bpy-addon-build@git+https://github.com/Moo-Ack-Productions/bpy-build@v0.3.0
