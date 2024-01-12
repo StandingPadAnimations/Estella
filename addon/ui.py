@@ -45,7 +45,9 @@ class LGH_PT_ToolPanel(bpy.types.Panel):
         row = layout.row()
         row.alignment = "CENTER"
         row.menu("lgh.lightgroup_menu")
+        row.enabled = bool(context.selected_objects)
         row.separator()
+        row = layout.row()
         row.operator("view.reset_solo_lightgroup")
 
         self.draw_all_lightgroups(context, layout)
