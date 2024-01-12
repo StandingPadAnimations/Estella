@@ -8,9 +8,9 @@ def redraw_area():
 
 
 class LGH_OT_set_light_group(bpy.types.Operator):
-    bl_idname = 'lgh.set_light_group'
-    bl_label = 'Set Light Group'
-    bl_option = {'UNDO_GROUPED'}
+    bl_idname = "lgh.set_light_group"
+    bl_label = "Set Light Group"
+    bl_option = {"UNDO_GROUPED"}
 
     dep_classes = []
 
@@ -28,15 +28,18 @@ class LGH_OT_set_light_group(bpy.types.Operator):
 
             for obj in context.selected_objects:
                 obj.lightgroup = target_lightgroup
-            return {'FINISHED'}
+            return {"FINISHED"}
 
-        op_create_new_light_group = type("DynOp",
-                                         (bpy.types.Operator,),
-                                         {"bl_idname": f'lgh.set_light_group_new',
-                                          "bl_label": "New Light Group",
-                                          "bl_description": f"Set Selected Objects' light group to a new light group ",
-                                          "execute": create_new_light_group,
-                                          })
+        op_create_new_light_group = type(
+            "DynOp",
+            (bpy.types.Operator,),
+            {
+                "bl_idname": f"lgh.set_light_group_new",
+                "bl_label": "New Light Group",
+                "bl_description": f"Set Selected Objects' light group to a new light group ",
+                "execute": create_new_light_group,
+            },
+        )
         self.dep_classes.append(op_create_new_light_group)
 
         # existing light groups
@@ -47,18 +50,20 @@ class LGH_OT_set_light_group(bpy.types.Operator):
                     obj.lightgroup = self.target_lightgroup
 
                 redraw_area()
-                return {'FINISHED'}
+                return {"FINISHED"}
 
-            op_cls = type("DynOp",
-                          (bpy.types.Operator,),
-                          {"bl_idname": f'lgh.set_light_group_{index}',
-                           "bl_label": lightgroup_item.name,
-                           "bl_description": f"Set Selected Objects' light group to '{lightgroup_item.name}'",
-                           "execute": execute,
-                           # custom pass in
-                           'target_lightgroup': lightgroup_item.name,
-                           },
-                          )
+            op_cls = type(
+                "DynOp",
+                (bpy.types.Operator,),
+                {
+                    "bl_idname": f"lgh.set_light_group_{index}",
+                    "bl_label": lightgroup_item.name,
+                    "bl_description": f"Set Selected Objects' light group to '{lightgroup_item.name}'",
+                    "execute": execute,
+                    # custom pass in
+                    "target_lightgroup": lightgroup_item.name,
+                },
+            )
 
             self.dep_classes.append(op_cls)
 
@@ -70,46 +75,49 @@ class LGH_OT_set_light_group(bpy.types.Operator):
 
         if len(context.view_layer.lightgroups) == 0:
             create_new_light_group(self, context)
-            return {'FINISHED'}
+            return {"FINISHED"}
         else:
 
             def draw_all_coll(self, context):
                 layout = self.layout
                 for cls in dep_classes:
-                    if cls.bl_idname == 'lgh.set_light_group_new':
-                        layout.operator(cls.bl_idname, icon='ADD')
+                    if cls.bl_idname == "lgh.set_light_group_new":
+                        layout.operator(cls.bl_idname, icon="ADD")
                         layout.separator()
                     else:
-                        layout.operator(cls.bl_idname, icon='LIGHT')
+                        layout.operator(cls.bl_idname, icon="LIGHT")
 
-            context.window_manager.popup_menu(draw_all_coll,
-                                              title=f"Set Light Group {len(context.selected_objects)} objects selected")
+            context.window_manager.popup_menu(
+                draw_all_coll,
+                title=f"Set Light Group {len(context.selected_objects)} objects selected",
+            )
             redraw_area()
 
-        return {'FINISHED'}
+        return {"FINISHED"}
 
 
 # rename lightgroup
 class LGH_OT_rename_light_group(bpy.types.Operator):
-    bl_idname = 'lgh.rename_light_group'
-    bl_label = 'Rename'
-    bl_option = {'UNDO_GROUPED'}
+    bl_idname = "lgh.rename_light_group"
+    bl_label = "Rename"
+    bl_option = {"UNDO_GROUPED"}
 
     lightgroup_name: bpy.props.StringProperty(name="Light Group Name")
     new_name: bpy.props.StringProperty(name="New Name", default="")
 
     def draw(self, context):
         layout = self.layout
-        layout.prop(self, 'new_name')
+        layout.prop(self, "new_name")
 
     def execute(self, context):
         # get obj list in lightgroup
         from .ui import get_obj_list_in_lightgroup
+
         fit_list = get_obj_list_in_lightgroup(self.lightgroup_name)
 
         if self.new_name in [lg.name for lg in context.view_layer.lightgroups]:
-            self.report({'ERROR'}, "Light Group Already Exists")
-            return {'CANCELLED'}
+            self.report({"ERROR"}, "Light Group Already Exists")
+            return {"CANCELLED"}
 
         context.view_layer.lightgroups[self.lightgroup_name].name = self.new_name
 
@@ -117,7 +125,7 @@ class LGH_OT_rename_light_group(bpy.types.Operator):
             obj.lightgroup = self.new_name
 
         redraw_area()
-        return {'FINISHED'}
+        return {"FINISHED"}
 
     def invoke(self, context, event):
         wm = context.window_manager
@@ -127,15 +135,16 @@ class LGH_OT_rename_light_group(bpy.types.Operator):
 
 # remove lightgroup
 class LGH_OT_remove_light_group(bpy.types.Operator):
-    bl_idname = 'lgh.remove_light_group'
-    bl_label = 'Remove'
-    bl_option = {'UNDO_GROUPED'}
+    bl_idname = "lgh.remove_light_group"
+    bl_label = "Remove"
+    bl_option = {"UNDO_GROUPED"}
 
     lightgroup_name: bpy.props.StringProperty(name="Light Group Name")
 
     def execute(self, context):
         # get obj list in lightgroup
         from .ui import get_obj_list_in_lightgroup
+
         fit_list = get_obj_list_in_lightgroup(self.lightgroup_name)
 
         for i, lightgroup_item in enumerate(context.view_layer.lightgroups):
@@ -147,7 +156,7 @@ class LGH_OT_remove_light_group(bpy.types.Operator):
             obj.lightgroup = ""
 
         redraw_area()
-        return {'FINISHED'}
+        return {"FINISHED"}
 
 
 def register():

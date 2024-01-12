@@ -26,11 +26,12 @@ bl_info = {
     "doc_url": "",
     "tracker_url": "",
     "description": "A simple script to help you manage your light groups",
-    'warning': "",
+    "warning": "",
     "location": "3D View N Panel",
 }
 
 from . import op_set_obj, op_set_lightgroup, set_comp_nodes, ui
+
 
 def register():
     op_set_obj.register()
@@ -38,11 +39,13 @@ def register():
     set_comp_nodes.register()
     ui.register()
 
+
 def unregister():
     op_set_obj.register()
     op_set_lightgroup.register()
     set_comp_nodes.register()
     ui.register()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     register()
