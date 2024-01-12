@@ -61,7 +61,7 @@ class LGH_OT_rename_light_group(bpy.types.Operator):
         layout.prop(self, "new_name")
 
     def execute(self, context):
-        from .ui import get_obj_list_in_lightgroup
+        from .util import get_obj_list_in_lightgroup
 
         # Get all objects from the lightgroup. This
         # is because Blender doesn't provide a native
@@ -99,7 +99,7 @@ class LGH_OT_remove_light_group(bpy.types.Operator):
                 bpy.ops.scene.view_layer_remove_lightgroup(i)
                 break
 
-        from .ui import get_obj_list_in_lightgroup
+        from .util import get_obj_list_in_lightgroup
 
         # Get all objects in the lightgroup
         # so we don't leave the field populated
