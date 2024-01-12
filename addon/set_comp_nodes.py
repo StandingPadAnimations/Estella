@@ -121,7 +121,7 @@ def register():
     bpy.types.NODE_MT_context_menu.prepend(menu_fun)
 
 
-def unresister():
+def unresigter():
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
     bpy.types.NODE_MT_context_menu.remove(menu_fun)

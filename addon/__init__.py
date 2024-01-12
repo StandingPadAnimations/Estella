@@ -41,10 +41,10 @@ def register():
 
 
 def unregister():
-    op_set_obj.register()
-    op_set_lightgroup.register()
-    set_comp_nodes.register()
-    ui.register()
+    op_set_obj.unregister()
+    op_set_lightgroup.unregister()
+    set_comp_nodes.unregister()
+    ui.unregister()
 
 
 if __name__ == "__main__":
