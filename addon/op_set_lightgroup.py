@@ -33,7 +33,8 @@ class LGH_OT_set_light_group(bpy.types.Operator):
 
 class LGH_MT_lightgroup_menu(bpy.types.Menu):
     bl_idname = "lgh.lightgroup_menu"
-    bl_label = "Light Groups"
+    bl_label = "Set Light Group for Object"
+    bl_description = "Select or create a new light group for the selected objects"
 
     def draw(self, context):
         layout = self.layout
@@ -42,15 +43,6 @@ class LGH_MT_lightgroup_menu(bpy.types.Menu):
         for group in context.view_layer.lightgroups:
             option = layout.operator("lgh.set_light_group", icon="LIGHT", text=group.name)
             option.target = group.name
-
-class LGH_OT_set_to_light_group(bpy.types.Operator):
-    bl_idname = "lgh.set_to_light_group"
-    bl_label = "Set to Light Group"
-    bl_description = "Set light group of selected object"
-
-    def execute(self, context):
-        bpy.ops.wm.call_menu(name="lgh.lightgroup_menu")
-        return {"FINISHED"}
 
 class LGH_OT_rename_light_group(bpy.types.Operator):
     bl_idname = "lgh.rename_light_group"
@@ -116,7 +108,6 @@ classes = [
     LGH_OT_create_light_group,
     LGH_MT_lightgroup_menu,
     LGH_OT_set_light_group,
-    LGH_OT_set_to_light_group,
     LGH_OT_rename_light_group,
     LGH_OT_remove_light_group
 ]

@@ -31,41 +31,81 @@ def get_obj_list_in_lightgroup(lightgroup_name):
 
     return list(set(obj_list))
 
-
-class LGH_PT_Panel(bpy.types.Panel):
-    bl_label = "Light Group"
+class LGH_PT_ToolPanel(bpy.types.Panel):
+    bl_label = "Light Groups"
     bl_region_type = "UI"
     bl_category = "LGH"
     bl_space_type = "VIEW_3D"
-    bl_option = {"DEFAULT_CLOSED"}
 
-    def draw(self, context):
-        if bpy.app.version < (3, 2, 0):
-            return
-
+    def draw(
+        self,
+        context,
+    ):
         layout = self.layout
-
-        view_layer = context.view_layer
-
         row = layout.row()
-        col = row.column()
-        col.template_list(
-            "UI_UL_list",
-            "lightgroups",
-            view_layer,
-            "lightgroups",
-            view_layer,
-            "active_lightgroup_index",
-            rows=2,
-        )
+        row.alignment = "CENTER"
+        row.menu("lgh.lightgroup_menu")
+        row.separator()
+        row.operator("view.reset_solo_lightgroup")
 
-        col = row.column()
-        sub = col.column(align=True)
-        sub.operator("scene.view_layer_add_lightgroup", icon="ADD", text="")
-        sub.operator("scene.view_layer_remove_lightgroup", icon="REMOVE", text="")
+        self.draw_all_lightgroups(context, layout)
 
-        if len(view_layer.lightgroups) == 0:
-            return
+    def draw_single_lightgroup(self, view_layer, obj, layout):
+        row = layout.row(align=True)
+        # solo light in light group
+        solo = row.operator("view.solo_light_in_lightgroup", text="", icon="EVENT_S")
+        solo.lightgroup = obj.lightgroup
+        solo.obj_name = obj.name
+        row.separator()
+        # select objects
+        row.operator(
+            "view.set_active_obj",
+            icon="OBJECT_DATA" if obj.type != "LIGHT" else "LIGHT",
+            text=obj.name,
+        ).obj_name = obj.name
+        row.separator()
+        # object property
+        row.prop(obj, "hide_viewport", text="")
+        row.prop(obj, "hide_render", text="")
+
+    def draw_all_lightgroups(self, context, layout):
+        for lightgroup_item in context.view_layer.lightgroups:
+            fit_list = get_obj_list_in_lightgroup(lightgroup_item.name)
+            col = layout.box().column(align=True)
+            col.use_property_split = True
+            col.use_property_decorate = False
+
+            row = col.row(align=True)
+            row.scale_x = 1.15
+            row.operator(
+                "view.solo_lightgroup_object", text="", icon="EVENT_S"
+            ).lightgroup = lightgroup_item.name
+            row.separator(factor=1)
+            row.operator(
+                "lgh.rename_light_group", text=lightgroup_item.name
+            ).lightgroup_name = lightgroup_item.name
+
+            row.separator(factor=2)
+
+            row.operator(
+                "view.toggle_lightgroup_visibility", icon="HIDE_OFF", text=""
+            ).lightgroup = lightgroup_item.name
+            row.operator(
+                "view.select_obj_by_lightgroup", text="", icon="RESTRICT_SELECT_OFF"
+            ).lightgroup = lightgroup_item.name
+
+            row.separator(factor=2)
+            row.operator(
+                "lgh.remove_light_group", icon="X", text=""
+            ).lightgroup_name = lightgroup_item.name
+
+            col.separator()
+
+            if len(fit_list) == 0:
+                col.label(text="Nothing in this Light Group")
+
+            for obj in fit_list:
+                self.draw_single_lightgroup(context.view_layer, obj, col)
 
 
 class LGH_PT_ObjectPanel(bpy.types.Panel):
@@ -145,92 +185,16 @@ class LGH_PT_ObjectPanel(bpy.types.Panel):
         row.alignment = "CENTER"
         row.prop(ob, "display_type")
 
-
-class LGH_PT_ToolPanel(bpy.types.Panel):
-    bl_label = "Tool"
-    bl_region_type = "UI"
-    bl_category = "LGH"
-    bl_space_type = "VIEW_3D"
-
-    def draw(
-        self,
-        context,
-    ):
-        layout = self.layout
-        layout.scale_y = 1.2
-        row = layout.row(align=True)
-        row.alignment = "CENTER"
-        row.operator("lgh.set_to_light_group")
-        row.separator()
-        row.operator("view.reset_solo_lightgroup")
-
-        self.draw_all_lightgroups(context, layout)
-
-    def draw_single_lightgroup(self, view_layer, obj, layout):
-        row = layout.row(align=True)
-        # solo light in light group
-        solo = row.operator("view.solo_light_in_lightgroup", text="", icon="EVENT_S")
-        solo.lightgroup = obj.lightgroup
-        solo.obj_name = obj.name
-        row.separator()
-        # select objects
-        row.operator(
-            "view.set_active_obj",
-            icon="OBJECT_DATA" if obj.type != "LIGHT" else "LIGHT",
-            text=obj.name,
-        ).obj_name = obj.name
-        row.separator()
-        # object property
-        row.prop(obj, "hide_viewport", text="")
-        row.prop(obj, "hide_render", text="")
-
-    def draw_all_lightgroups(self, context, layout):
-        for lightgroup_item in context.view_layer.lightgroups:
-            fit_list = get_obj_list_in_lightgroup(lightgroup_item.name)
-            col = layout.box().column(align=True)
-            col.use_property_split = True
-            col.use_property_decorate = False
-
-            row = col.row(align=True)
-            row.scale_x = 1.15
-            row.operator(
-                "view.solo_lightgroup_object", text="", icon="EVENT_S"
-            ).lightgroup = lightgroup_item.name
-            row.separator(factor=1)
-            row.operator(
-                "lgh.rename_light_group", text=lightgroup_item.name
-            ).lightgroup_name = lightgroup_item.name
-
-            row.separator(factor=2)
-
-            row.operator(
-                "view.toggle_lightgroup_visibility", icon="HIDE_OFF", text=""
-            ).lightgroup = lightgroup_item.name
-            row.operator(
-                "view.select_obj_by_lightgroup", text="", icon="RESTRICT_SELECT_OFF"
-            ).lightgroup = lightgroup_item.name
-
-            row.separator(factor=2)
-            row.operator(
-                "lgh.remove_light_group", icon="X", text=""
-            ).lightgroup_name = lightgroup_item.name
-
-            col.separator()
-
-            if len(fit_list) == 0:
-                col.label(text="Nothing in this Light Group")
-
-            for obj in fit_list:
-                self.draw_single_lightgroup(context.view_layer, obj, col)
-
+classes = [
+    LGH_PT_ToolPanel,
+    LGH_PT_ObjectPanel
+]
 
 def register():
-    bpy.utils.register_class(LGH_PT_Panel)
-    bpy.utils.register_class(LGH_PT_ObjectPanel)
-    bpy.utils.register_class(LGH_PT_ToolPanel)
+    for cls in classes:
+        bpy.utils.register_class(cls)
 
 
 def unregister():
-    bpy.utils.unregister_class(LGH_PT_Panel)
-    bpy.utils.unregister_class(LGH_PT_ObjectPanel)
-    bpy.utils.unregister_class(LGH_PT_ToolPanel)
+    for cls in reversed(classes):
+        bpy.utils.unregister_class(cls)
