@@ -1,0 +1,8 @@
+addon_folder: addon 
+build_name: lightgroup_helper 
+
+install_versions:
+  - 4.0
+  - 3.6
+  - 3.5
+  - 3.4
