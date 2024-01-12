@@ -1,65 +1,48 @@
+# ##### BEGIN GPL LICENSE BLOCK #####
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+#
+# ##### END GPL LICENSE BLOCK #####
+
 bl_info = {
     "name": "Light Group Helper",
-    "author": "Atticus",
+    "author": "Forked by Mahid Sheikh, originally written by Atticus",
     "blender": (3, 2, 0),
-    "version": (0, 4),
+    "version": (0, 5),
     "category": "Lighting",
     "support": "COMMUNITY",
     "doc_url": "",
     "tracker_url": "",
-    "description": "A simple script to help you manage your light groups.",
+    "description": "A simple script to help you manage your light groups",
     'warning': "",
     "location": "3D View N Panel",
 }
 
-import importlib
-import sys
-import os
-from itertools import groupby
-
-# get folder name
-__folder_name__ = __name__
-__dict__ = {}
-
-addon_dir = os.path.dirname(__file__)
-
-# get all .py file dir
-py_paths = [os.path.join(root, f) for root, dirs, files in os.walk(addon_dir) for f in files if
-            f.endswith('.py') and f != '__init__.py']
-
-for path in py_paths:
-    name = os.path.basename(path)[:-3]
-    correct_path = path.replace('\\', '/')
-    # split dir with folder name
-    dir_list = [list(g) for k, g in groupby(correct_path.split('/'), lambda x: x == __folder_name__) if
-                not k]
-    # combine dir and make dict like this: 'name:folder.name'
-    if 'colorthief' not in dir_list[-1]:
-        r_name_raw = __folder_name__ + '.' + '.'.join(dir_list[-1])
-        __dict__[name] = r_name_raw[:-3]
-
-# auto reload
-for name in __dict__.values():
-    if name in sys.modules:
-        importlib.reload(sys.modules[name])
-    else:
-        globals()[name] = importlib.import_module(name)
-        setattr(globals()[name], 'modules', __dict__)
+from . import op_set_obj, op_set_lightgroup, set_comp_nodes, ui
 
 def register():
-    for name in __dict__.values():
-        if name in sys.modules and hasattr(sys.modules[name], 'register'):
-            try:
-                sys.modules[name].register()
-            except ValueError:  # open template file may cause this problem
-                pass
-
+    op_set_obj.register()
+    op_set_lightgroup.register()
+    set_comp_nodes.register()
+    ui.register()
 
 def unregister():
-    for name in __dict__.values():
-        if name in sys.modules and hasattr(sys.modules[name], 'unregister'):
-            sys.modules[name].unregister()
-
+    op_set_obj.register()
+    op_set_lightgroup.register()
+    set_comp_nodes.register()
+    ui.register()
 
 if __name__ == '__main__':
     register()
