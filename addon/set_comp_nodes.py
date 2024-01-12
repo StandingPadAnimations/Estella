@@ -1,9 +1,8 @@
 import bpy
 
-
 # generate composite nodes for viewlayer lightgroup
-class NODE_OT_set_lightgroup_postprocess_nodes(bpy.types.Operator):
-    bl_idname = "node.set_lightgroup_postprocess_nodes"
+class LGM_OT_set_lightgroup_postprocess_nodes(bpy.types.Operator):
+    bl_idname = "lgm.set_lightgroup_postprocess_nodes"
     bl_label = "Set Lightgroup Postprocess Nodes"
 
     @classmethod
@@ -31,7 +30,7 @@ class NODE_OT_set_lightgroup_postprocess_nodes(bpy.types.Operator):
         lg_passes = ["Combined_" + lightgroup_name for lightgroup_name in lg_list]
 
         # when there is no lightgroup
-        if len(lg_list) == 0 or len(lg_list) == 1:
+        if not len(lg_list) or len(lg_list) == 1:
             return {"CANCELLED"}
 
         # create group node
@@ -108,19 +107,21 @@ def menu_fun(self, context):
         == "CompositorNodeRLayers"
     ):
         self.layout.operator(
-            NODE_OT_set_lightgroup_postprocess_nodes.bl_idname,
+            LGM_OT_set_lightgroup_postprocess_nodes.bl_idname,
             text="Combine Lightgroup Passes",
         )
         self.layout.separator()
 
-
+classes = [
+    LGM_OT_set_lightgroup_postprocess_nodes
+]
 def register():
-    bpy.utils.register_class(NODE_OT_set_lightgroup_postprocess_nodes)
-    # add to context menu
+    for cls in classes:
+        bpy.utils.register_class(cls)
     bpy.types.NODE_MT_context_menu.prepend(menu_fun)
 
 
 def unresister():
-    bpy.utils.unregister_class(NODE_OT_set_lightgroup_postprocess_nodes)
-
+    for cls in reversed(classes):
+        bpy.utils.unregister_class(cls)
     bpy.types.NODE_MT_context_menu.remove(menu_fun)
