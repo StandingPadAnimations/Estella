@@ -160,7 +160,7 @@ class LGH_PT_ToolPanel(bpy.types.Panel):
         layout.scale_y = 1.2
         row = layout.row(align=True)
         row.alignment = "CENTER"
-        row.operator("lgh.set_light_group")
+        row.operator("lgh.set_to_light_group")
         row.separator()
         row.operator("view.reset_solo_lightgroup")
 
