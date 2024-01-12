@@ -17,7 +17,7 @@
 # ##### END GPL LICENSE BLOCK #####
 
 bl_info = {
-    "name": "Light Group Helper",
+    "name": "Estalla",
     "author": "Forked by Mahid Sheikh, originally written by Atticus",
     "blender": (3, 2, 0),
     "version": (0, 5),

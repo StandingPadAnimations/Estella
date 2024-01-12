@@ -1,8 +1,6 @@
-# Lightgroup Helper
+# Estalla
 
-A helper addon for Blender's light groups.
-
-![Lightgroup Helper](res/2.jpg)
+A helper addon for light groups and linking in Blender.
 
 # Features
 This is a fork of atticus' original lightgroup helper. Here's the main features of the addon:
