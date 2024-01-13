@@ -9,7 +9,7 @@ class ESTELLA_OT_light_linking_new_reciever_collection(bpy.types.Operator):
     def execute(self, context):
         scene = context.scene
         active = context.active_object
-        light = scene.objects[scene.light_index]
+        light = scene.objects[scene.estella_light_index]
         context.view_layer.objects.active = light
         res = bpy.ops.object.light_linking_receiver_collection_new()
         context.view_layer.objects.active = active
@@ -24,7 +24,7 @@ class ESTELLA_OT_light_linking_new_blocker_collection(bpy.types.Operator):
     def execute(self, context):
         scene = context.scene
         active = context.active_object
-        light = scene.objects[scene.light_index]
+        light = scene.objects[scene.estella_shadow_index]
         context.view_layer.objects.active = light
         res = bpy.ops.object.light_linking_blocker_collection_new()
         context.view_layer.objects.active = active

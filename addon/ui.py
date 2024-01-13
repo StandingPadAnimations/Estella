@@ -191,10 +191,10 @@ class ESTELLA_PT_LightLinking(bpy.types.Panel):
                           scene,
                           "objects", 
                           scene, 
-                          "light_index")
+                          "estella_light_index")
 
-        if scene.light_index:
-            object = scene.objects[scene.light_index]
+        if scene.estella_light_index:
+            object = scene.objects[scene.estella_light_index]
             light_linking = object.light_linking
 
             col = row.column()
@@ -227,10 +227,10 @@ class ESTELLA_PT_ShadowLinking(bpy.types.Panel):
                           scene,
                           "objects", 
                           scene, 
-                          "light_index")
+                          "estella_shadow_index")
 
-        if scene.light_index:
-            object = scene.objects[scene.light_index]
+        if scene.estella_shadow_index:
+            object = scene.objects[scene.estella_shadow_index]
             light_linking = object.light_linking
 
             col = row.column()
@@ -261,11 +261,12 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
 
-    bpy.types.Scene.light_index = bpy.props.IntProperty()
-
+    bpy.types.Scene.estella_light_index = bpy.props.IntProperty()
+    bpy.types.Scene.estella_shadow_index = bpy.props.IntProperty()
 
 def unregister():
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
 
-    del bpy.types.Scene.light_index
+    del bpy.types.Scene.estella_light_index
+    del bpy.types.Scene.estella_shadow_index
