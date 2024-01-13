@@ -53,7 +53,7 @@ class VIEW_OT_toggle_lightgroup_visibility(bpy.types.Operator):
     lightgroup: bpy.props.StringProperty(name="Lightgroup")
 
     def invoke(self, context, event):
-        from .ui import get_obj_list_in_lightgroup
+        from .util import get_obj_list_in_lightgroup
 
         fit_list = get_obj_list_in_lightgroup(self.lightgroup)
         vis = not fit_list[0].hide_viewport
@@ -75,7 +75,7 @@ class VIEW_OT_solo_lightgroup_object(bpy.types.Operator):
 
     def execute(self, context):
         # get all lightgroup objects
-        from .ui import get_obj_list_in_lightgroup
+        from .util import get_obj_list_in_lightgroup
 
         for lightgroup_item in context.view_layer.lightgroups:
             obj_list = get_obj_list_in_lightgroup(lightgroup_item.name)
@@ -102,7 +102,7 @@ class VIEW_OT_solo_light_in_lightgroup(bpy.types.Operator):
 
     def execute(self, context):
         # get objects with lightgroup
-        from .ui import get_obj_list_in_lightgroup
+        from .util import get_obj_list_in_lightgroup
 
         fit_list = get_obj_list_in_lightgroup(self.lightgroup)
         for obj in fit_list:
@@ -124,7 +124,7 @@ class VIEW_OT_reset_solo_lightgroup(bpy.types.Operator):
 
     def execute(self, context):
         # get all lightgroup objects
-        from .ui import get_obj_list_in_lightgroup
+        from .util import get_obj_list_in_lightgroup
 
         for lightgroup_item in context.view_layer.lightgroups:
             obj_list = get_obj_list_in_lightgroup(lightgroup_item.name)
