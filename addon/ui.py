@@ -4,7 +4,7 @@ from . import util
 class LGH_PT_ToolPanel(bpy.types.Panel):
     bl_label = "Light Groups"
     bl_region_type = "UI"
-    bl_category = "LGH"
+    bl_category = "Estella"
     bl_space_type = "VIEW_3D"
 
     def draw(
@@ -83,7 +83,7 @@ class LGH_PT_ToolPanel(bpy.types.Panel):
 class LGH_PT_ObjectPanel(bpy.types.Panel):
     bl_label = "Object"
     bl_region_type = "UI"
-    bl_category = "LGH"
+    bl_category = "Estella"
     bl_space_type = "VIEW_3D"
 
     def draw(self, context):
@@ -157,15 +157,78 @@ class LGH_PT_ObjectPanel(bpy.types.Panel):
         row.alignment = "CENTER"
         row.prop(ob, "display_type")
 
+class ESTELLA_UL_light_linking(bpy.types.UIList):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
+        scene = data
+        light = item
 
-classes = [LGH_PT_ToolPanel, LGH_PT_ObjectPanel]
+        if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            layout.prop(light, "name", text="", emboss=False, icon_value=layout.icon(light))
+
+    def filter_items(self, context, data, property):
+        objects = getattr(data, property)
+        filter_flags = [0] * len(objects)
+        visible = 1 << 30
+
+        for i, obj in enumerate(objects):
+            if obj.type == "LIGHT":
+                filter_flags[i] = visible
+
+        return filter_flags, ()
+
+class ESTELLA_PT_LightLinking(bpy.types.Panel):
+    bl_label = "Light Linking"
+    bl_space_type = "PROPERTIES"
+    bl_region_type = "WINDOW"
+    bl_context = "scene"
+
+    def draw(self, context):
+        layout = self.layout
+        row = layout.row()
+        scene = context.scene
+        row.template_list("ESTELLA_UL_light_linking", 
+                          "", 
+                          scene,
+                          "objects", 
+                          scene, 
+                          "light_index")
+
+        if scene.light_index:
+            object = scene.objects[scene.light_index]
+            light_linking = object.light_linking
+
+            col = row.column()
+            col.template_ID(
+                light_linking,
+                "receiver_collection",
+                new="object.light_linking_receiver_collection_new")
+            col.template_light_linking_collection(row, light_linking, "receiver_collection")
+
+            col = row.column()
+            sub = col.column(align=True)
+            prop = sub.operator("object.light_linking_receivers_link", icon='ADD', text="")
+            prop.link_state = 'INCLUDE'
+            sub.operator("object.light_linking_unlink_from_collection", icon='REMOVE', text="")
+            sub = col.column()
+            sub.menu("CYCLES_OBJECT_MT_light_linking_context_menu", icon='DOWNARROW_HLT', text="")
+
+classes = [
+    LGH_PT_ToolPanel, 
+    LGH_PT_ObjectPanel,
+    ESTELLA_UL_light_linking,
+    ESTELLA_PT_LightLinking
+]
 
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
 
+    bpy.types.Scene.light_index = bpy.props.IntProperty()
+
 
 def unregister():
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
+
+    del bpy.types.Scene.light_index
