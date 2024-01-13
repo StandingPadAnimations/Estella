@@ -10,10 +10,11 @@ This is a fork of atticus' original lightgroup helper. Here's the main features 
 + Management
     + Easy renaming and deletion of light groups
     + Improve visibility options for objects
+    + Using light linking is now 10 times easier with a simple panel
 + Composition 
     + Combine passes in one click!
 
-The following changes are made in this fork:
+Addition improvements are made in this fork:
 + UI adjustments
     + Made UI options easier to use
     + Added documentation for operators and UI elements
