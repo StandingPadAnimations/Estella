@@ -212,11 +212,48 @@ class ESTELLA_PT_LightLinking(bpy.types.Panel):
             sub = col.column()
             sub.menu("CYCLES_OBJECT_MT_light_linking_context_menu", icon='DOWNARROW_HLT', text="")
 
+class ESTELLA_PT_ShadowLinking(bpy.types.Panel):
+    bl_label = "Shadow Linking"
+    bl_space_type = "PROPERTIES"
+    bl_region_type = "WINDOW"
+    bl_context = "scene"
+
+    def draw(self, context):
+        layout = self.layout
+        row = layout.row()
+        scene = context.scene
+        row.template_list("ESTELLA_UL_light_linking", 
+                          "", 
+                          scene,
+                          "objects", 
+                          scene, 
+                          "light_index")
+
+        if scene.light_index:
+            object = scene.objects[scene.light_index]
+            light_linking = object.light_linking
+
+            col = row.column()
+            col.template_ID(
+                light_linking,
+                "blocker_collection",
+                new="object.light_linking_blocker_collection_new")
+            col.template_light_linking_collection(row, light_linking, "blocker_collection")
+
+            col = row.column()
+            sub = col.column(align=True)
+            prop = sub.operator("object.light_linking_blockers_link", icon='ADD', text="")
+            prop.link_state = 'INCLUDE'
+            sub.operator("object.light_linking_unlink_from_collection", icon='REMOVE', text="")
+            sub = col.column()
+            sub.menu("CYCLES_OBJECT_MT_shadow_linking_context_menu", icon='DOWNARROW_HLT', text="")
+
 classes = [
     LGH_PT_ToolPanel, 
     LGH_PT_ObjectPanel,
     ESTELLA_UL_light_linking,
-    ESTELLA_PT_LightLinking
+    ESTELLA_PT_LightLinking,
+    ESTELLA_PT_ShadowLinking
 ]
 
 
