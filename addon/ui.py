@@ -201,7 +201,7 @@ class ESTELLA_PT_LightLinking(bpy.types.Panel):
             col.template_ID(
                 light_linking,
                 "receiver_collection",
-                new="object.light_linking_receiver_collection_new")
+                new="estella.light_linking_receiver_collection_new")
             col.template_light_linking_collection(row, light_linking, "receiver_collection")
 
             col = row.column()
@@ -237,7 +237,7 @@ class ESTELLA_PT_ShadowLinking(bpy.types.Panel):
             col.template_ID(
                 light_linking,
                 "blocker_collection",
-                new="object.light_linking_blocker_collection_new")
+                new="estella.light_linking_blocker_collection_new")
             col.template_light_linking_collection(row, light_linking, "blocker_collection")
 
             col = row.column()

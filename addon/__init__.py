@@ -30,12 +30,13 @@ bl_info = {
     "location": "3D View N Panel",
 }
 
-from . import op_set_obj, op_set_lightgroup, set_comp_nodes, ui
+from . import op_set_obj, op_set_lightgroup, op_set_linking, set_comp_nodes, ui
 
 
 def register():
     op_set_obj.register()
     op_set_lightgroup.register()
+    op_set_linking.register()
     set_comp_nodes.register()
     ui.register()
 
@@ -43,6 +44,7 @@ def register():
 def unregister():
     op_set_obj.unregister()
     op_set_lightgroup.unregister()
+    op_set_linking.unregister()
     set_comp_nodes.unregister()
     ui.unregister()
 
