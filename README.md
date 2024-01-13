@@ -1,6 +1,5 @@
 # Estalla
-
-A helper addon for light groups and linking in Blender.
+An addon to streamline working with lights in Blender.
 
 # Features
 This is a fork of atticus' original lightgroup helper. Here's a summery main features of the addon:
@@ -11,13 +10,18 @@ This is a fork of atticus' original lightgroup helper. Here's a summery main fea
     + Easy renaming and deletion of light groups
     + Improve visibility options for objects
     + Using light and shadow linking is now 10 times easier with a simple panel
-+ Composition 
-    + Combine passes in one click!
 
 ## Light linking
 Light linking's UI is pretty clunky at times, requiring selecting the light you want to work with first. Estella makes this easier by bring the light and shadow linking panels to Scene properties, with a UI to make selecting lights easier!
 
 ![Light and shadow linking panels in Estella](images/linking.png)
+
+## Light Groups
+Estella makes working with light groups less of a chore, by making it both easier to make and view light groups. With Estella, you can hide a group of lights in one click, and isolate to a specific light group in another. Renaming light groups is now made easy with a simply UI, and same with removing.
+
+![Light groups UI in Estella](images/groups.png)
+
+*Thanks to atticus for the original implementation of light group related features*
 
 Addition improvements are made in this fork:
 + UI adjustments
@@ -27,3 +31,7 @@ Addition improvements are made in this fork:
 + Code quality improvements
     + Reduced obfuscation in `__init__.py` (see [here](https://github.com/atticus-lv/lightgroup_helper/blob/master/__init__.py) for the original vs [refactored](https://github.com/StandingPadAnimations/lightgroup_helper/blob/master/addon/__init__.py) file)
     + Adjust code to conform to higher code quality standards
+
+# Roadmap
++ Fix combine light groups
++ Add an object centeric UI for light and shadow linking
