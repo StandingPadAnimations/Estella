@@ -1,6 +1,8 @@
 # Estalla
 An addon to streamline working with lights in Blender.
 
+[Check out v1.0 announcement](https://www.standingpad.org/posts/2024/01/estalla-first-release/)
+
 # Features
 This is a fork of atticus' original lightgroup helper. Here's a summery main features of the addon:
 + Streamline light group creation
@@ -15,11 +17,13 @@ This is a fork of atticus' original lightgroup helper. Here's a summery main fea
 Light linking's UI is pretty clunky at times, requiring selecting the light you want to work with first. Estella makes this easier by bring the light and shadow linking panels to Scene properties, with a UI to make selecting lights easier!
 
 ![Light and shadow linking panels in Estella](images/linking.png)
+![](https://www.standingpad.org/posts/2024/01/estalla-first-release/gallary/showcase.webm)
 
 ## Light Groups
 Estella makes working with light groups less of a chore, by making it both easier to make and view light groups. With Estella, you can hide a group of lights in one click, and isolate to a specific light group in another. Renaming light groups is now made easy with a simply UI, and same with removing.
 
 ![Light groups UI in Estella](images/groups.png)
+![](https://www.standingpad.org/posts/2024/01/estalla-first-release/gallary/showcase.webm)
 
 *Thanks to atticus for the original implementation of light group related features*
 
